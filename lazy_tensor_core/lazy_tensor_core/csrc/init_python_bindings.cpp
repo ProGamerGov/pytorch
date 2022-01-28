@@ -30,6 +30,7 @@
 #include "torch/csrc/autograd/utils/wrap_outputs.h"
 #include "torch/csrc/autograd/variable.h"
 #include "torch/csrc/jit/python/pybind.h"
+#include "torch/csrc/lazy/core/config.h"
 #include "torch/csrc/utils/cuda_lazy_init.h"
 
 namespace torch_lazy_tensors {
@@ -682,6 +683,9 @@ void InitLtcModuleBindings(py::module m) {
   m.def("_ltc_init_ts_backend", []() { compiler::InitTorchScriptBackend(); });
   m.def("_ltc_set_noop_execution_mode", [](bool enable_noop) {
     torch::lazy::LazyGraphExecutor::Get()->SetNoOpExecutionMode(enable_noop);
+  });
+  m.def("_ltc_enable_thread_pool", []() {
+    FLAGS_torch_lazy_use_thread_pool = true;
   });
 }  // namespace
 
